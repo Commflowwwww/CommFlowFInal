@@ -1,0 +1,542 @@
+/* ===== BOTÃO OUTLINE ===== */
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid #007bc0;
+    color: #007bc0;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin-right: 10px;
+}
+
+.btn-outline:hover {
+    background-color: #007bc0;
+    color: white;
+}
+
+/* ===== VARIÁVEIS DE CORES ===== */
+:root {
+    --bosch-red: #d50005;
+    --bosch-blue: #006ead;
+    --bosch-light: #008ecf;
+    --bosch-gradient: linear-gradient(135deg, #005691, #008ecf);
+    --bg: #ffffff;
+    --nav-bg: #eff1f2;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-sub: #64748b;
+    --border: #cbd5e1;
+    --input-bg: #ffffff;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #006ead;
+}
+
+body.dark {
+    --bg: #0f172a;
+    --nav-bg: #1e293b;
+    --card-bg: #1e293b;
+    --text: #f8fafc;
+    --text-sub: #94a3b8;
+    --border: #334155;
+    --input-bg: #0f172a;
+}
+
+/* ===== RESET E BASE ===== */
+* { 
+    box-sizing: border-box; 
+    transition: background 0.3s, color 0.3s, border-color 0.3s; 
+    font-family: 'Inter', sans-serif; 
+}
+
+body { 
+    margin: 0; 
+    padding-top: 60px;
+    background: var(--bg); 
+    color: var(--text); 
+    display: flex; 
+    min-height: 100vh; 
+}
+
+/* ===== HEADER FIXO ===== */
+.top-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1001;
+    border-bottom: 1px solid var(--border);
+}
+
+/* ===== HEADER - LADO ESQUERDO ===== */
+.header-left { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+.bosch-logo { 
+    height: 25px;
+    transition: filter 0.3s ease;
+}
+
+body.dark .bosch-logo {
+    filter: brightness(0) invert(1);
+}
+
+.divider { 
+    width: 1px; 
+    height: 30px; 
+    background: var(--border); 
+}
+
+/* ===== LOGOS COMMFLOW (CORRIGIDO) ===== */
+.commflow-logo {
+    position: relative;
+    display: inline-block;
+}
+
+.logo-ajustavel {
+    height: 45px;
+    width: auto;
+    display: block;
+    pointer-events: none;
+}
+
+/* Por padrão mostra apenas a logo light */
+.logo-light {
+    display: block;
+}
+
+.logo-dark {
+    display: none;
+}
+
+/* No dark mode: esconde light e mostra dark */
+body.dark .logo-light {
+    display: none;
+}
+
+body.dark .logo-dark {
+    display: block;
+}
+
+/* ===== HEADER - LADO DIREITO ===== */
+.header-right { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+/* ===== DROPDOWN DE IDIOMAS ===== */
+.lang-custom-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.lang-btn {
+    background: #ffffff;
+    border: none;
+    color: var(--text);
+    padding: 0px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0px;
+    height: 48px;
+    transition: all 0.2s;
+}
+
+body.dark .lang-btn {
+    background: #1e293b;
+    border-color: var(--border);
+}
+
+.lang-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: var(--card-bg);
+    min-width: 150px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border: none;
+    margin-top: 5px;
+}
+
+.lang-dropdown-content div {
+    color: var(--text);
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.lang-dropdown-content div:hover {
+    background-color: var(--bosch-blue);
+    color: white;
+}
+
+.show-lang {
+    display: block !important;
+}
+
+/* ===== BOTÃO DE TEMA (DARK MODE) ===== */
+.theme-toggle-btn {
+    background: #ffffff;
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 8px;
+}
+
+body.dark .theme-toggle-btn {
+    background: #1e293b;
+    border-color: var(--border);
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(0, 110, 173, 0.1);
+}
+
+/* Inverter cores dos ícones no Dark Mode */
+body.dark .lang-btn img, 
+body.dark .theme-toggle-btn img {
+    filter: invert(1);
+}
+
+/* Ícone do calendário no modo dark */
+body.dark input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+/* ===== BARRA LATERAL ===== */
+nav {
+    width: 80px;
+    background: var(--nav-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    padding: 20px 0;
+    gap: 10px;
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    z-index: 100;
+    border-right: 0px solid var(--border);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+nav.expanded {
+    width: 260px;
+    align-items: stretch;
+    padding: 20px 10px;
+}
+
+.menu-toggle {
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--text);
+    width: 60px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-item {
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    border-radius: 0px;
+    font-size: 1.1rem;
+    color: var(--text-sub);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    padding: 0;
+}
+
+/* Garante que o item da nav alinhe verticalmente todos os elementos no centro */
+.nav-item {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    display: flex;  
+    justify-content: center; /* centraliza na horizontal */ 
+    align-items: center;     /* centraliza na vertical */
+ 
+    /* Seus outros estilos de padding, color, etc. já devem estar aqui */
+}
+
+
+/* Estilização específica para a imagem da logo */
+.nav-icon-img {
+    width: 19.2px;
+    height: 19.2px;
+    object-fit: contain;
+    
+    /* Centraliza a imagem horizontalmente em relação ao espaço que um ícone normal ocuparia */
+    display: inline-block;
+    vertical-align: middle;
+    
+    /* Aplica a cor cinza padrão dos seus outros ícones (ajuste se necessário) */
+    filter: invert(50%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(90%);
+    transition: filter 0.3s ease;
+}
+
+/* Muda a cor do SVG para branco (ou a cor do seu texto) quando passar o mouse */
+.nav-item:hover .nav-icon-img,
+.nav-item.active .nav-icon-img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+/* --- MODO ESCURO (Dark Mode) --- */
+/* Quando o body tiver a classe .dark, mudamos o filtro do ícone */
+body.dark .nav-icon-img {
+    /* Cor dos ícones no modo escuro (Ex: Cinza claro) */
+    filter: invert(70%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+
+body.dark .nav-item:hover .nav-icon-img,
+body.dark .nav-item.active .nav-icon-img {
+    /* Cor no hover/ativo no modo escuro (Ex: Branco total) */
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+
+.nav-item i {
+    min-width: 80px; 
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+nav.expanded .nav-item i {
+    min-width: 60px; 
+}
+
+.nav-item span {
+    display: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+nav.expanded .nav-item span {
+    display: block;
+}
+
+.nav-item.active {
+    background: var(--bosch-blue) !important;
+    color: #ffffff !important;
+}
+
+.nav-item.active i, .nav-item.active span {
+    color: #ffffff !important;
+}
+
+.nav-item:hover:not(.active) {
+    background: rgba(0, 110, 173, 0.1);
+    color: var(--bosch-blue);
+}
+
+.nav-bottom {
+    margin-top: auto;
+    width: 100%;
+}
+
+/* ===== CONTEÚDO PRINCIPAL ===== */
+main { 
+    flex: 1; 
+    padding: 40px; 
+    display: flex; 
+    justify-content: center; 
+}
+
+.container { 
+    width: 100%; 
+    max-width: 1000px; 
+}
+
+.view-content { 
+    display: none; 
+    animation: fadeIn 0.4s ease; 
+}
+
+.view-content.active { 
+    display: block; 
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; } 
+}
+
+.card { 
+    background: var(--card-bg); 
+    padding: 35px; 
+    margin-bottom: 20px; 
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); 
+    border: 1px solid var(--border); 
+    position: relative; 
+    overflow: hidden; 
+}
+
+.card::before { 
+    content: ""; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 8px; 
+    background: url('https://i.postimg.cc/85rCJ1Dc/supergraphic.png') no-repeat center; 
+    background-size: cover; 
+    z-index: 1; 
+}
+
+.header-flex { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 30px; 
+}
+
+/* ===== FORMULÁRIO ===== */
+.form-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+}
+
+.full-width { 
+    grid-column: span 2; 
+}
+
+label { 
+    display: block; 
+    font-size: 0.75rem; 
+    font-weight: 0; 
+    margin-bottom: 8px; 
+    color: var(--text-sub); 
+    text-transform: uppercase; 
+}
+
+input, select, textarea { 
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 0px; 
+    border: none;
+    background: #E0E2E5;
+    color: var(--text); 
+    outline: none; 
+    font-size: 0.95rem; 
+}
+
+/* ===== SELECT CUSTOMIZADO ===== */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #E0E2E5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%231e293b'%3E%3Cpath d='M5 7l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+body.dark select {
+    background-color: #1e293b;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23ffffff'%3E%3Cpath d='M5 7l5 5 5-5'/%3E%3C/svg%3E");
+}
+
+body.dark input,
+body.dark textarea {
+    background-color: #1e293b;
+    color: var(--text);
+}
+
+input:focus { 
+    border-color: var(--bosch-light); 
+    box-shadow: 0 0 0 3px rgba(0, 142, 207, 0.1); 
+}
+
+.drop-zone { 
+    border: 2px dashed var(--border); 
+    border-radius: 0px; 
+    padding: 30px; 
+    text-align: center; 
+    background: var(--bg); 
+    cursor: pointer; 
+}
+
+/* ===== BOTÕES ===== */
+.btn-primary { 
+    background: var(--bosch-blue); 
+    color: white; 
+    border: none; 
+    padding: 14px 28px; 
+    border-radius: 0px; 
+    cursor: pointer; 
+    font-weight: 0; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.btn-secondary { 
+    background: transparent; 
+    border: 1px solid var(--border); 
+    color: var(--text-sub); 
+    padding: 14px 28px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: 0; 
+}
+
+/* ===== STATUS BADGES ===== */
+.status-badge { 
+    padding: 6px 12px; 
+    border-radius: 20px; 
+    font-size: 0.75rem; 
+    font-weight: 0; 
+    color: white; 
+    display: inline-block; 
+    white-space: nowrap; 
+}
+
+.status-enviado { background-color: #71767c; }
+.status-recebido { background-color: #deb300; }
+.status-progresso { background-color: #007bc0; }
+.status-finalizado { background-color: #4ab073; }
+.status-recusado { background-color: #ed0007; }
+
+/* ===== TABELA ===== */
+.lean-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 15px; 
+}
+
+.lean-table th, .lean-table td { 
+    padding: 15px; 
+    text-align: left; 
+    border-bottom: 1px solid var(--border); 
+}

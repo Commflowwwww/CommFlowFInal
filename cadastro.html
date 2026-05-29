@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bosch CommFlow | Primeiro Acesso</title>
+    <link rel="stylesheet" href="login-styles.css">
+    <style>
+        .loading-btn { opacity: 0.7; pointer-events: none; }
+        .msg-erro { color: #EA0016; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none; }
+        .msg-sucesso { color: #10b981; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Bosch-logo.svg/1280px-Bosch-logo.svg.png" 
+                 alt="Bosch Logo" class="bosch-logo-login">
+        </div>
+
+        <div class="login-card">
+            <div class="commflow-logo-login">
+                <img src="https://raw.githubusercontent.com/matheusdaniel1201-maker/TCC-ADM5--CommFLOW/refs/heads/main/logo%20(2).svg" 
+                     alt="CommFlow Logo">
+            </div>
+            
+            <h2>Primeiro Acesso</h2>
+            <p class="login-subtitle">Crie sua conta no Lean Communication System</p>
+
+            <form id="cadastro-form">
+                <div class="input-group">
+                    <label for="new-username">Usuário Bosch (ID)</label>
+                    <input type="text" id="new-username" placeholder="Ex: joao.silva ou seu ID Bosch" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="new-password">Nova Senha</label>
+                    <input type="password" id="new-password" placeholder="Digite uma senha segura" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="confirm-password">Confirmar Senha</label>
+                    <input type="password" id="confirm-password" placeholder="Digite a senha novamente" required>
+                </div>
+
+                <p class="msg-erro" id="msg-erro"></p>
+                <p class="msg-sucesso" id="msg-sucesso"></p>
+
+                <button type="submit" class="btn-login" id="btn-cadastrar">
+                    Cadastrar Conta
+                </button>
+
+                <div class="login-footer">
+                    <a href="login.html">Voltar para o Login</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="login-bottom">
+            <p>© 2026 Robert Bosch GmbH. Todos os direitos reservados.</p>
+        </div>
+    </div>
+
+    <!-- Supabase obrigatório antes do script -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="cadastro-script.js"></script>
+</body>
+</html>
