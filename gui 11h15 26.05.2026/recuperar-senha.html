@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bosch CommFlow | Recuperar Senha</title>
+    <link rel="stylesheet" href="login-styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Bosch-logo.svg/1280px-Bosch-logo.svg.png" 
+                 alt="Bosch Logo" 
+                 class="bosch-logo-login">
+        </div>
+
+        <div class="login-card">
+            <div class="commflow-logo-login">
+                <img src="https://raw.githubusercontent.com/matheusdaniel1201-maker/TCC-ADM5--CommFLOW/refs/heads/main/logo%20(2).svg" 
+                     alt="CommFlow Logo">
+            </div>
+            
+            <h2>Redefinir Senha</h2>
+            <p class="login-subtitle">Digite seu usuário para cadastrar uma nova senha</p>
+
+            <form id="recuperar-form">
+                <div class="input-group">
+                    <label for="reset-username">Usuário Bosch</label>
+                    <input type="text" id="reset-username" placeholder="Digite seu usuário cadastrado" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="reset-password">Nova Senha</label>
+                    <input type="password" id="reset-password" placeholder="Digite a nova senha" required>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Alterar Senha
+                </button>
+
+                <div class="login-footer">
+                    <a href="login.html">Voltar para o Login</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="login-bottom">
+            <p>© 2024 Robert Bosch GmbH. Todos os direitos reservados.</p>
+        </div>
+    </div>
+
+    <script src="recuperar-script.js"></script>
+</body>
+</html>
