@@ -15,6 +15,86 @@ const SUPABASE_KEY = "sb_publishable_C1EXoWc7ly_-hHZALVWArw_7X3peuyx";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 console.log("Supabase conectado!");
 
+// ===== CONFIGURAÇÃO GEMINI =====
+const GEMINI_KEY = "AQ.Ab8RN6Kcy5eV2BzHOUNkYpM2xHcui9w1YPgOEbNGr6WJdeJ4Jg"; // ← cole sua nova chave aqui
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+const geminiCache = {};
+
+async function traduzirElementosExtras(lang) {
+    if (lang === 'pt') return; // PT é o idioma base, não precisa traduzir
+    if (geminiCache[lang]) {
+        aplicarTraducaoExtra(geminiCache[lang]);
+        return;
+    }
+
+    // Coleta textos que o dicionário manual NÃO cobre
+    const seletores = [
+        '#f-area option', '#f-urgency option', '#f-type option',
+        '#f-audience option', '#f-platform option',
+        '.nav-item span', '.drop-zone p', '.drop-zone small',
+        '#report-content strong', '.btn-secondary'
+    ];
+
+    const elementos = [];
+    seletores.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+            if (el.textContent.trim()) elementos.push(el);
+        });
+    });
+
+    const textos = elementos.map(el => el.textContent.trim());
+    if (textos.length === 0) return;
+
+    const langNome = { en: 'English', es: 'Spanish', de: 'German' }[lang];
+
+    try {
+        document.body.style.opacity = '0.85';
+        const res = await fetch(GEMINI_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{
+                        text: `Translate the following JSON array to ${langNome}.
+Return ONLY a valid JSON array, same order, same length.
+Preserve acronyms: PT-LA, GS-LA, PS-LA, SO-LA, MA-LA, CLT, RH, TI, CIPA, SSMA, LGPD, P&D.
+Preserve brand names: Bosch, CommFlow, Supabase, Outlook, Teams, WhatsApp.
+Input: ${JSON.stringify(textos)}`
+                    }]
+                }]
+            })
+        });
+
+        const data = await res.json();
+        const raw = data.candidates[0].content.parts[0].text;
+        const traduzidos = JSON.parse(raw.replace(/```json|```/g, '').trim());
+
+        geminiCache[lang] = { elementos: textos, traduzidos };
+        elementos.forEach((el, i) => { el.textContent = traduzidos[i] ?? el.textContent; });
+
+    } catch (err) {
+        console.warn('Gemini: erro na tradução extra', err);
+    } finally {
+        document.body.style.opacity = '1';
+    }
+}
+
+function aplicarTraducaoExtra(cache) {
+    const seletores = [
+        '#f-area option', '#f-urgency option', '#f-type option',
+        '#f-audience option', '#f-platform option',
+        '.nav-item span', '.drop-zone p', '.drop-zone small',
+        '#report-content strong', '.btn-secondary'
+    ];
+    const elementos = [];
+    seletores.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+            if (el.textContent.trim()) elementos.push(el);
+        });
+    });
+    elementos.forEach((el, i) => { el.textContent = cache.traduzidos[i] ?? el.textContent; });
+}
+
 // ===== MENU DE IDIOMAS =====
 function toggleLangMenu() {
     document.getElementById("lang-options").classList.toggle("show-lang");
@@ -171,6 +251,7 @@ function changeLang(lang) {
     const selector = document.querySelector('.lang-dropdown');
     if (selector) selector.value = lang;
     updateUI();
+    traduzirElementosExtras(lang);
 }
 
 // ===== ATUALIZAÇÃO DA INTERFACE =====
