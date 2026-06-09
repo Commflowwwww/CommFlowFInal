@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bosch CommFlow | Primeiro Acesso</title>
     <link rel="stylesheet" href="login-styles.css">
+    <style>
+        .loading-btn { opacity: 0.7; pointer-events: none; }
+        .msg-erro { color: #EA0016; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none; }
+        .msg-sucesso { color: #10b981; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none; }
+    </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-header">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Bosch-logo.svg/1280px-Bosch-logo.svg.png" 
-                 alt="Bosch Logo" 
-                 class="bosch-logo-login">
+                 alt="Bosch Logo" class="bosch-logo-login">
         </div>
 
         <div class="login-card">
@@ -26,7 +30,7 @@
             <form id="cadastro-form">
                 <div class="input-group">
                     <label for="new-username">Usuário Bosch (ID)</label>
-                    <input type="text" id="new-username" placeholder="Ex: admin ou seu ID" required>
+                    <input type="text" id="new-username" placeholder="Ex: joao.silva ou seu ID Bosch" required>
                 </div>
 
                 <div class="input-group">
@@ -39,7 +43,10 @@
                     <input type="password" id="confirm-password" placeholder="Digite a senha novamente" required>
                 </div>
 
-                <button type="submit" class="btn-login">
+                <p class="msg-erro" id="msg-erro"></p>
+                <p class="msg-sucesso" id="msg-sucesso"></p>
+
+                <button type="submit" class="btn-login" id="btn-cadastrar">
                     Cadastrar Conta
                 </button>
 
@@ -50,12 +57,12 @@
         </div>
 
         <div class="login-bottom">
-            <p>© 2024 Robert Bosch GmbH. Todos os direitos reservados.</p>
+            <p>© 2026 Robert Bosch GmbH. Todos os direitos reservados.</p>
         </div>
     </div>
 
+    <!-- Supabase obrigatório antes do script -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
     <script src="cadastro-script.js"></script>
 </body>
 </html>

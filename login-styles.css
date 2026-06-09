@@ -7,6 +7,7 @@
     --bosch-gray: #E0E2E5;
     --text-dark: #1e293b;
     --text-light: #64748b;
+    --Bosch-bluedark: #0547a3;
 }
 
 /* ===== RESET E BASE ===== */
@@ -58,14 +59,14 @@ body {
 /* ===== CARD DE LOGIN ===== */
 .login-card {
     background: white;
-    border-radius: 16px;
+    border-radius: 0px;
     padding: 40px 35px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
 }
 
-/* Barra vermelha superior (identidade Bosch) */
+/* Barra azul superior (identidade Bosch) */
 .login-card::before {
     content: "";
     position: absolute;
@@ -73,7 +74,7 @@ body {
     left: 0;
     width: 100%;
     height: 6px;
-    background: var(--bosch-red);
+    background: var(--Bosch-blue);
 }
 
 /* ===== LOGO COMMFLOW ===== */
@@ -119,7 +120,7 @@ body {
     width: 100%;
     padding: 12px 16px;
     border: 2px solid var(--bosch-gray);
-    border-radius: 8px;
+    border-radius: 0px;
     font-size: 0.95rem;
     transition: all 0.3s;
     background: white;
@@ -159,7 +160,7 @@ body {
     color: white;
     border: none;
     padding: 14px;
-    border-radius: 8px;
+    border-radius: 0px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
