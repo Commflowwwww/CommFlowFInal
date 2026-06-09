@@ -1,27 +1,26 @@
+// ===== CREDENCIAIS VÊM DO config.js =====
 document.addEventListener('DOMContentLoaded', function() {
+    const supabaseREC = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     const recuperarForm = document.getElementById('recuperar-form');
-
     if (recuperarForm) {
-        recuperarForm.addEventListener('submit', function(e) {
+        recuperarForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-
-            const username = document.getElementById('reset-username').value.trim();
+            const username    = document.getElementById('reset-username').value.trim();
             const newPassword = document.getElementById('reset-password').value;
-
-            // Se for o admin ou se o usuário existir no localStorage, permite alterar
-            if (username === "admin" || localStorage.getItem(`user_db_${username}`) !== null) {
-                
-                if (username === "admin") {
-                    // Salva a nova senha do admin separadamente
-                    localStorage.setItem('user_db_admin', newPassword);
-                } else {
-                    localStorage.setItem(`user_db_${username}`, newPassword);
-                }
-
-                alert('✅ Senha alterada com sucesso!');
-                window.location.href = "login.html";
-            } else {
+            const { data: usuario, error } = await supabaseREC
+                .from('usuarios').select('id')
+                .eq('nome', username).maybeSingle();
+            if (error || !usuario) {
                 alert('❌ Usuário não encontrado no sistema!');
+                return;
+            }
+            const { error: updateError } = await supabaseREC
+                .from('usuarios').update({ senha: newPassword }).eq('nome', username);
+            if (updateError) {
+                alert('Erro ao alterar senha: ' + updateError.message);
+            } else {
+                alert('✅ Senha alterada com sucesso!');
+                window.location.href = 'login.html';
             }
         });
     }

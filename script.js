@@ -3,16 +3,14 @@ function logout() {
     if (confirm('Deseja realmente sair do sistema?')) {
         localStorage.removeItem('bosch_logged');
         localStorage.removeItem('bosch_user');
-        localStorage.removeItem('bosch_user_id');
         sessionStorage.clear();
         window.location.href = "login.html";
     }
 }
 
-// ===== CONFIGURAÇÃO SUPABASE =====
-const SUPABASE_URL = "https://oslkqesroakoltfcirjy.supabase.co";
-const SUPABASE_KEY = "sb_publishable_C1EXoWc7ly_-hHZALVWArw_7X3peuyx";
+// ===== CONFIGURAÇÃO SUPABASE (credenciais vêm do config.js) =====
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 console.log("Supabase conectado!");
 
 // ===== MENU DE IDIOMAS =====
@@ -21,7 +19,7 @@ function toggleLangMenu() {
 }
 
 function selectLang(lang) {
-    changeLang(lang);
+    changeLang(lang); 
     document.getElementById("current-lang-text").textContent = lang.toUpperCase();
     toggleLangMenu();
 }
@@ -37,16 +35,16 @@ window.onclick = function(event) {
 
 // ===== NAVEGAÇÃO SIDEBAR =====
 function toggleNav() {
-    document.getElementById('sidebar').classList.toggle('expanded');
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('expanded');
 }
 
 // ===== VARIÁVEIS GLOBAIS =====
 let currentStep = 1;
 let currentLang = 'pt';
-let uploadedFiles  = [];   // objetos File reais (para upload)
-let uploadedNames  = [];   // nomes para exibição
-let dropZone       = null;
-let fileInput      = null;
+let uploadedFiles = [];
+let dropZone = null;
+let fileInput = null;
 let fileListDisplay = null;
 
 // ===== TRADUÇÕES =====
@@ -120,49 +118,12 @@ const translations = {
 // ===== FUNÇÕES DE ARQUIVOS =====
 function handleFiles(files) {
     Array.from(files).forEach(file => {
-        // Evita duplicatas pelo nome
-        if (uploadedNames.includes(file.name)) return;
-
-        uploadedFiles.push(file);     // guarda o File real
-        uploadedNames.push(file.name);
-
+        uploadedFiles.push(file.name);
         const item = document.createElement('div');
         item.className = 'file-item';
         item.innerHTML = `<i class="fas fa-file-alt"></i> ${file.name}`;
         fileListDisplay.appendChild(item);
     });
-}
-
-// ===== UPLOAD DOS ARQUIVOS PARA O SUPABASE STORAGE =====
-// Retorna um array de objetos { nome, url } com os links públicos
-async function uploadArquivos() {
-    if (uploadedFiles.length === 0) return [];
-
-    const BUCKET = 'briefing-arquivos'; // nome do bucket que você criará no Supabase
-    const resultados = [];
-
-    for (const file of uploadedFiles) {
-        // Caminho único: timestamp + nome original
-        const caminho = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
-
-        const { data, error } = await supabaseClient.storage
-            .from(BUCKET)
-            .upload(caminho, file, { upsert: false });
-
-        if (error) {
-            console.error(`Erro ao enviar ${file.name}:`, error.message);
-            resultados.push({ nome: file.name, url: null });
-        } else {
-            // Gera URL pública
-            const { data: urlData } = supabaseClient.storage
-                .from(BUCKET)
-                .getPublicUrl(caminho);
-            resultados.push({ nome: file.name, url: urlData.publicUrl });
-            console.log(`✅ Arquivo enviado: ${file.name} → ${urlData.publicUrl}`);
-        }
-    }
-
-    return resultados;
 }
 
 // ===== MUDANÇA DE IDIOMA =====
@@ -176,35 +137,33 @@ function changeLang(lang) {
 // ===== ATUALIZAÇÃO DA INTERFACE =====
 function updateUI() {
     const t = translations[currentLang];
-
+    
     document.getElementById('txt-main-title').textContent = t.title;
     document.getElementById('txt-subtitle').textContent = t.subtitle;
     document.getElementById('txt-success').textContent = t.success;
 
     const stepTitleEl = document.getElementById('txt-step-title');
     if (stepTitleEl) stepTitleEl.textContent = t.step_titles[currentStep - 1];
-
-    document.getElementById('lbl-dept').textContent    = t.labels.dept;
+    
+    document.getElementById('lbl-dept').textContent = t.labels.dept;
     document.getElementById('lbl-urgency').textContent = t.labels.urgency;
     document.getElementById('lbl-contact').textContent = t.labels.contact;
-    document.getElementById('lbl-date').textContent    = t.labels.date;
-    document.getElementById('lbl-theme').textContent   = t.labels.theme;
-    document.getElementById('lbl-type').textContent    = t.labels.type;
-    document.getElementById('lbl-public').textContent  = t.labels.public;
-    document.getElementById('lbl-header').textContent  = t.labels.header;
+    document.getElementById('lbl-date').textContent = t.labels.date;
+    document.getElementById('lbl-theme').textContent = t.labels.theme;
+    document.getElementById('lbl-type').textContent = t.labels.type;
+    document.getElementById('lbl-public').textContent = t.labels.public;
+    document.getElementById('lbl-header').textContent = t.labels.header;
     document.getElementById('lbl-content').textContent = t.labels.content;
-    document.getElementById('lbl-media').textContent   = t.labels.media;
+    document.getElementById('lbl-media').textContent = t.labels.media;
 
     document.getElementById('f-requester').placeholder = t.placeholders.contact;
-    document.getElementById('f-theme').placeholder     = t.placeholders.theme;
-    document.getElementById('f-header').placeholder    = t.placeholders.header;
-    document.getElementById('f-content').placeholder   = t.placeholders.content;
+    document.getElementById('f-theme').placeholder = t.placeholders.theme;
+    document.getElementById('f-header').placeholder = t.placeholders.header;
+    document.getElementById('f-content').placeholder = t.placeholders.content;
 
-    document.getElementById('nextBtn').innerHTML = currentStep === 3
-        ? `${t.finish} <i class="fas fa-paper-plane"></i>`
-        : `${t.next} <i class="fas fa-arrow-right"></i>`;
+    document.getElementById('nextBtn').innerHTML = currentStep === 3 ? `${t.finish} <i class="fas fa-paper-plane"></i>` : `${t.next} <i class="fas fa-arrow-right"></i>`;
     document.getElementById('prevBtn').textContent = t.prev;
-
+    
     const stepCountEl = document.getElementById('step-count');
     if (stepCountEl) stepCountEl.textContent = currentStep + "/3";
 }
@@ -213,8 +172,12 @@ function updateUI() {
 function moveStep(n) {
     if (n === 1) {
         const currentStepEl = document.getElementById(`step${currentStep}`);
-        if (!currentStepEl) { console.error("Step não encontrado!"); return; }
-
+        
+        if (!currentStepEl) {
+            console.error("Erro: Step não encontrado!");
+            return;
+        }
+        
         const inputs = currentStepEl.querySelectorAll('input:not([type="file"]):not([type="checkbox"]), select, textarea');
         let isValid = true;
         let primeiroCampoVazio = null;
@@ -237,86 +200,49 @@ function moveStep(n) {
         }
     }
 
-    // ===== ENVIO FINAL (PASSO 3) =====
+    // Lógica de envio final (Passo 3)
     if (n === 1 && currentStep === 3) {
-        // Desabilita o botão para evitar duplo clique
-        const btnNext = document.getElementById('nextBtn');
-        btnNext.disabled = true;
-        btnNext.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Enviando...`;
-
         const statusOpcoes = [
-            "Briefing enviado",
-            "Briefing Recebido",
-            "Briefing em progresso",
-            "Briefing finalizado",
+            "Briefing enviado", 
+            "Briefing Recebido", 
+            "Briefing em progresso", 
+            "Briefing finalizado", 
             "Briefing recusado"
         ];
+        
         const statusAleatorio = statusOpcoes[Math.floor(Math.random() * statusOpcoes.length)];
 
-        // Faz o upload dos arquivos ANTES de salvar o briefing
-        uploadArquivos().then(arquivosUpload => {
+        const briefing = {
+            area: document.getElementById('f-area')?.value || "",
+            urgency: document.getElementById('f-urgency')?.value || "",
+            requester: document.getElementById('f-requester')?.value || "",
+            sendDate: document.getElementById('f-sendDate')?.value || "",
+            theme: document.getElementById('f-theme')?.value || "",
+            type: document.getElementById('f-type')?.value || "",
+            audience: document.getElementById('f-audience')?.value || "",
+            header: document.getElementById('f-header')?.value || "",
+            content: document.getElementById('f-content')?.value || "",
+            platform: document.getElementById("f-platform")?.value || "",
+            media: uploadedFiles.join(", ") || "Nenhum arquivo anexado",
+            datetime: new Date().toLocaleString(),
+            status: statusAleatorio
+        };
 
-            // Monta strings para localStorage (nomes) e para Supabase (JSON com links)
-            const arquivosNomes = arquivosUpload.length > 0
-                ? arquivosUpload.map(a => a.nome).join(", ")
-                : "Nenhum arquivo anexado";
+        let history = JSON.parse(localStorage.getItem("briefHistory")) || [];
+        history.push(briefing);
+        localStorage.setItem("briefHistory", JSON.stringify(history));
 
-            const arquivosJson = arquivosUpload.length > 0
-                ? arquivosUpload  // array de { nome, url }
-                : [];
-
-            // Monta links formatados para exibição no histórico
-            const arquivosLinks = arquivosUpload.length > 0
-                ? arquivosUpload.map(a =>
-                    a.url
-                        ? `<a href="${a.url}" target="_blank" style="color:var(--bosch-blue)">${a.nome}</a>`
-                        : `<span style="color:var(--text-sub)">${a.nome} (erro no upload)</span>`
-                  ).join('<br>')
-                : "Nenhum arquivo anexado";
-
-            const briefing = {
-                area:      document.getElementById('f-area')?.value || "",
-                urgency:   document.getElementById('f-urgency')?.value || "",
-                requester: document.getElementById('f-requester')?.value || "",
-                sendDate:  document.getElementById('f-sendDate')?.value || "",
-                theme:     document.getElementById('f-theme')?.value || "",
-                type:      document.getElementById('f-type')?.value || "",
-                audience:  document.getElementById('f-audience')?.value || "",
-                header:    document.getElementById('f-header')?.value || "",
-                content:   document.getElementById('f-content')?.value || "",
-                platform:  document.getElementById("f-platform")?.value || "",
-                media:     arquivosNomes,
-                mediaLinks: arquivosJson,   // guarda os links no histórico local
-                mediaHtml:  arquivosLinks,  // para exibição no modal
-                datetime:  new Date().toLocaleString(),
-                status:    statusAleatorio
-            };
-
-            // Salva no histórico local
-            let history = JSON.parse(localStorage.getItem("briefHistory")) || [];
-            history.push(briefing);
-            localStorage.setItem("briefHistory", JSON.stringify(history));
-
-            // Envia ao Supabase
-            enviarFormulario(arquivosJson).then(sucesso => {
-                if (sucesso) {
-                    document.getElementById("multi-form").style.display = 'none';
-                    document.getElementById("success-screen").style.display = 'block';
-                    if (typeof confetti !== 'undefined') {
-                        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                    }
-                } else {
-                    // Re-habilita o botão em caso de erro
-                    btnNext.disabled = false;
-                    updateUI();
-                }
-            });
-        });
-
+        document.getElementById("multi-form").style.display = 'none';
+        document.getElementById("success-screen").style.display = 'block';
+        
+        if (typeof confetti !== 'undefined') {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        }
+        
         return;
     }
 
-    // Troca de step
+    // Troca de abas do formulário
     const steps = document.querySelectorAll('.form-step');
     steps[currentStep - 1].style.display = 'none';
     currentStep += n;
@@ -333,11 +259,12 @@ function loadHistory() {
 
     history.forEach((item, index) => {
         const status = item.status || "Briefing enviado";
+
         let statusClass = "status-enviado";
-        if (status === "Briefing Recebido")    statusClass = "status-recebido";
+        if (status === "Briefing Recebido") statusClass = "status-recebido";
         else if (status === "Briefing em progresso") statusClass = "status-progresso";
-        else if (status === "Briefing finalizado")   statusClass = "status-finalizado";
-        else if (status === "Briefing recusado")     statusClass = "status-recusado";
+        else if (status === "Briefing finalizado") statusClass = "status-finalizado";
+        else if (status === "Briefing recusado") statusClass = "status-recusado";
 
         table.innerHTML += `
             <tr>
@@ -353,10 +280,6 @@ function loadHistory() {
 function openReport(index) {
     const history = JSON.parse(localStorage.getItem("briefHistory")) || [];
     const data = history[index];
-
-    // Usa mediaHtml se disponível (com links clicáveis), senão usa media simples
-    const arquivosExibicao = data.mediaHtml || data.media || "-";
-
     document.getElementById("report-content").innerHTML = `
         <p><strong>Área:</strong> ${data.area || "-"}</p>
         <p><strong>Urgência:</strong> ${data.urgency || "-"}</p>
@@ -370,7 +293,7 @@ function openReport(index) {
         <p><strong>Título:</strong> ${data.header || "-"}</p>
         <p><strong>Plataforma:</strong> ${data.platform || "-"}</p>
         <p><strong>Conteúdo:</strong><br>${data.content || "-"}</p>
-        <p><strong>Arquivos:</strong><br>${arquivosExibicao}</p>
+        <p><strong>Arquivos:</strong> <span style="color: var(--bosch-blue)">${data.media || "-"}</span></p>
         <hr>
         <p><strong>Registrado em:</strong> ${data.datetime}</p>`;
     document.getElementById("report-modal").style.display = "flex";
@@ -383,9 +306,8 @@ function closeReport() {
 // ===== RESET DO FORMULÁRIO =====
 function resetForm() {
     document.getElementById("multi-form").reset();
-    uploadedFiles  = [];
-    uploadedNames  = [];
-    if (fileListDisplay) fileListDisplay.innerHTML = "";
+    uploadedFiles = [];
+    fileListDisplay.innerHTML = "";
     document.getElementById("success-screen").style.display = 'none';
     document.getElementById("multi-form").style.display = 'block';
     document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
@@ -403,78 +325,95 @@ function switchTab(tab, el) {
     if (tab === 'history') loadHistory();
 }
 
-// ===== DARK MODE =====
+// ===== DARK MODE (CORRIGIDO) =====
 function toggleTheme() {
     document.body.classList.toggle('dark');
-    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    
+    // Salva a preferência
+    if (document.body.classList.contains('dark')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
 }
 
-// ===== ENVIAR BRIEFING PARA SUPABASE =====
-// arquivosJson = array de { nome, url } vindo do upload
-async function enviarFormulario(arquivosJson = []) {
+// ===== ENVIAR PARA SUPABASE =====
+async function enviarFormulario() {
+    if (typeof supabaseClient === 'undefined' || !supabaseClient) {
+        console.warn("⚠️ Supabase não disponível. Salvando apenas localmente.");
+        return true;
+    }
+
     try {
+        const arquivosString = uploadedFiles.length > 0 ? uploadedFiles.join(", ") : "Nenhum arquivo anexado";
+        
         const { data, error } = await supabaseClient
             .from('briefings')
-            .insert([{
-                area_solicitante: document.getElementById('f-area').value,
-                urgencia:         document.getElementById('f-urgency').value,
-                responsavel:      document.getElementById('f-requester').value,
-                periodo_envio:    document.getElementById('f-sendDate').value,
-                tema:             document.getElementById('f-theme').value,
-                tipo_comunicado:  document.getElementById('f-type').value,
-                publico_alvo:     document.getElementById('f-audience').value,
-                titulo_header:    document.getElementById('f-header').value,
-                conteudo:         document.getElementById('f-content').value,
-                plataforma_envio: document.getElementById('f-platform').value,
-                // Salva o array de { nome, url } no campo jsonb
-                arquivos: arquivosJson.length > 0 ? arquivosJson : "Nenhum arquivo anexado"
-            }]);
+            .insert([
+                {
+                    area_solicitante: document.getElementById('f-area').value,
+                    urgencia: document.getElementById('f-urgency').value,
+                    responsavel: document.getElementById('f-requester').value,
+                    periodo_envio: document.getElementById('f-sendDate').value,
+                    tema: document.getElementById('f-theme').value,
+                    tipo_comunicado: document.getElementById('f-type').value,
+                    publico_alvo: document.getElementById('f-audience').value,
+                    titulo_header: document.getElementById('f-header').value,
+                    conteudo: document.getElementById('f-content').value,
+                    plataforma_envio: document.getElementById('f-platform').value,
+                    arquivos: arquivosString
+                }
+            ]);
 
         if (error) {
-            console.error("❌ Erro Supabase:", error);
-            alert("Erro ao enviar! " + error.message);
-            return false;
+            console.error("❌ Erro ao enviar para Supabase:", error);
+            return true;
+        } else {
+            console.log("✅ Enviado para Supabase:", data);
+            return true;
         }
-        console.log("✅ Briefing salvo no Supabase:", data);
+    } catch (error) {
+        console.error("❌ Erro crítico:", error);
         return true;
-
-    } catch (err) {
-        console.error("❌ Erro crítico:", err);
-        alert("Erro inesperado ao enviar.");
-        return false;
     }
 }
 
 // ===== INICIALIZAÇÃO =====
-window.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('DOMContentLoaded', function() {
     console.log("✅ Sistema CommFlow carregado!");
-
-    // Carrega tema salvo
-    if (localStorage.getItem('theme') === 'dark') {
+    
+    // Carrega o tema salvo (DARK MODE)
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
         document.body.classList.add('dark');
     }
+    
+    if (!window.location.pathname.includes('login.html')) {
+        // Inicializa o DropZone
+        dropZone = document.getElementById('drop-zone');
+        fileInput = document.getElementById('f-files');
+        fileListDisplay = document.getElementById('file-list');
 
-    // DropZone
-    dropZone        = document.getElementById('drop-zone');
-    fileInput       = document.getElementById('f-files');
-    fileListDisplay = document.getElementById('file-list');
+        if (dropZone) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
 
-    if (dropZone) {
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => {
-            dropZone.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); });
-        });
-        dropZone.addEventListener('dragover',  () => dropZone.classList.add('drag-over'));
-        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-        dropZone.addEventListener('drop', e => {
-            dropZone.classList.remove('drag-over');
-            handleFiles(e.dataTransfer.files);
-        });
+            dropZone.addEventListener('dragover', () => dropZone.classList.add('drag-over'));
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+            dropZone.addEventListener('drop', (e) => {
+                dropZone.classList.remove('drag-over');
+                handleFiles(e.dataTransfer.files);
+            });
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+        }
+
+        updateUI();
     }
-
-    if (fileInput) {
-        fileInput.addEventListener('change', e => handleFiles(e.target.files));
-    }
-
-    updateUI();
-    loadHistory();
 });

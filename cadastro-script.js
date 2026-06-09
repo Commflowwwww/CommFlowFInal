@@ -1,7 +1,5 @@
-// ===== CONFIGURAÇÃO SUPABASE (independente) =====
-const SUPABASE_URL_CAD = "https://oslkqesroakoltfcirjy.supabase.co";
-const SUPABASE_KEY_CAD = "sb_publishable_C1EXoWc7ly_-hHZALVWArw_7X3peuyx";
-const supabaseCAD = supabase.createClient(SUPABASE_URL_CAD, SUPABASE_KEY_CAD);
+// ===== CREDENCIAIS VÊM DO config.js =====
+const supabaseCAD = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 function mostrarErro(msg) {
     const el = document.getElementById('msg-erro');
@@ -30,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
-
         const nome     = document.getElementById('new-username').value.trim();
         const senha    = document.getElementById('new-password').value;
         const confirma = document.getElementById('confirm-password').value;
@@ -40,9 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (senha.length < 4) { mostrarErro('A senha deve ter pelo menos 4 caracteres.'); return; }
 
         setLoading(true);
-
         try {
-            // Verifica se usuário já existe
             const { data: existente, error: erroConsulta } = await supabaseCAD
                 .from('usuarios')
                 .select('id')
@@ -50,26 +45,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 .maybeSingle();
 
             if (erroConsulta) throw erroConsulta;
+            if (existente) { mostrarErro('❌ Usuário já cadastrado. Faça o login.'); setLoading(false); return; }
 
-            if (existente) {
-                mostrarErro('❌ Este usuário já está cadastrado. Faça o login.');
-                setLoading(false);
-                return;
-            }
-
-            // Insere novo usuário na tabela 'usuarios'
             const { error: erroInsert } = await supabaseCAD
                 .from('usuarios')
                 .insert([{ nome: nome, senha: senha }]);
 
             if (erroInsert) throw erroInsert;
 
-            mostrarSucesso('✅ Conta criada! Redirecionando para o login...');
+            mostrarSucesso('✅ Conta criada! Redirecionando...');
             setTimeout(() => { window.location.href = 'login.html'; }, 1500);
-
         } catch (err) {
             console.error('Erro no cadastro:', err);
-            mostrarErro('Erro ao cadastrar. Tente novamente. (' + (err.message || err) + ')');
+            mostrarErro('Erro ao cadastrar. (' + (err.message || err) + ')');
             setLoading(false);
         }
     });

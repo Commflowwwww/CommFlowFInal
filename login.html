@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bosch CommFlow | Login</title>
+    
+    <!-- ===== LINK PARA O CSS DO LOGIN ===== -->
     <link rel="stylesheet" href="login-styles.css">
-    <style>
-        .loading-btn { opacity: 0.7; pointer-events: none; }
-        .msg-erro { color: #EA0016; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none; }
-    </style>
 </head>
 <body>
     <div class="login-container">
+        <!-- Logo da Bosch -->
         <div class="login-header">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Bosch-logo.svg/1280px-Bosch-logo.svg.png" 
-                 alt="Bosch Logo" class="bosch-logo-login">
+                 alt="Bosch Logo" 
+                 class="bosch-logo-login">
         </div>
 
+        <!-- Card de Login -->
         <div class="login-card">
             <div class="commflow-logo-login">
                 <img src="https://raw.githubusercontent.com/matheusdaniel1201-maker/TCC-ADM5--CommFLOW/refs/heads/main/logo%20(2).svg" 
@@ -26,15 +27,22 @@
             <h2>Lean Communication System</h2>
             <p class="login-subtitle">Sistema de Otimização de Fluxo de Informação</p>
 
+            <!-- ===== FORMULÁRIO DE LOGIN ===== -->
             <form id="login-form">
                 <div class="input-group">
                     <label for="username">Usuário Bosch</label>
-                    <input type="text" id="username" placeholder="Digite seu usuário" required>
+                    <input type="text" 
+                           id="username" 
+                           placeholder="Digite seu usuário" 
+                           required>
                 </div>
 
                 <div class="input-group">
                     <label for="password">Senha</label>
-                    <input type="password" id="password" placeholder="Digite sua senha" required>
+                    <input type="password" 
+                           id="password" 
+                           placeholder="Digite sua senha" 
+                           required>
                 </div>
 
                 <div class="remember-me">
@@ -42,9 +50,7 @@
                     <label for="remember">Lembrar meu acesso</label>
                 </div>
 
-                <p class="msg-erro" id="msg-erro"></p>
-
-                <button type="submit" class="btn-login" id="btn-login">
+                <button type="submit" class="btn-login">
                     Acessar Sistema
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -52,13 +58,14 @@
                 </button>
 
                 <div class="login-footer">
-                    <a href="recuperar-senha.html">Esqueci minha senha</a>
-                    <span>|</span>
-                    <a href="cadastro.html">Primeiro acesso</a>
-                </div>
+    <a href="recuperar-senha.html">Esqueci minha senha</a>
+    <span>|</span>
+    <a href="cadastro.html">Primeiro acesso</a>
+</div>
             </form>
         </div>
 
+        <!-- Rodapé -->
         <div class="login-bottom">
             <p>© 2024 Robert Bosch GmbH. Todos os direitos reservados.</p>
             <div class="login-links">
@@ -69,8 +76,9 @@
         </div>
     </div>
 
-    <!-- Supabase obrigatório antes do script -->
+    <!-- ===== LINK PARA O JAVASCRIPT DO LOGIN ===== -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <script src="login-script.js"></script>
 </body>
 </html>

@@ -21,7 +21,7 @@
     --bosch-blue: #006ead;
     --bosch-light: #008ecf;
     --bosch-gradient: linear-gradient(135deg, #005691, #008ecf);
-    --bg: #ffffff;
+    --bg: #f4f7f9;
     --nav-bg: #eff1f2;
     --card-bg: #ffffff;
     --text: #1e293b;
@@ -142,7 +142,7 @@ body.dark .logo-dark {
 }
 
 .lang-btn {
-    background: #ffffff;
+    background: #f4f7f9;
     border: none;
     color: var(--text);
     padding: 0px;
@@ -190,7 +190,7 @@ body.dark .lang-btn {
 
 /* ===== BOTÃO DE TEMA (DARK MODE) ===== */
 .theme-toggle-btn {
-    background: #ffffff;
+    background: #f4f7f9;
     border: none;
     width: 38px;
     height: 38px;
@@ -271,51 +271,6 @@ nav.expanded {
     text-decoration: none;
     transition: all 0.2s;
     padding: 0;
-}
-
-/* Garante que o item da nav alinhe verticalmente todos os elementos no centro */
-.nav-item {
-    display: flex;
-    align-items: center; /* Centraliza verticalmente */
-    display: flex;  
-    justify-content: center; /* centraliza na horizontal */ 
-    align-items: center;     /* centraliza na vertical */
- 
-    /* Seus outros estilos de padding, color, etc. já devem estar aqui */
-}
-
-
-/* Estilização específica para a imagem da logo */
-.nav-icon-img {
-    width: 19.2px;
-    height: 19.2px;
-    object-fit: contain;
-    
-    /* Centraliza a imagem horizontalmente em relação ao espaço que um ícone normal ocuparia */
-    display: inline-block;
-    vertical-align: middle;
-    
-    /* Aplica a cor cinza padrão dos seus outros ícones (ajuste se necessário) */
-    filter: invert(50%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(90%);
-    transition: filter 0.3s ease;
-}
-
-/* Muda a cor do SVG para branco (ou a cor do seu texto) quando passar o mouse */
-.nav-item:hover .nav-icon-img,
-.nav-item.active .nav-icon-img {
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
-}
-/* --- MODO ESCURO (Dark Mode) --- */
-/* Quando o body tiver a classe .dark, mudamos o filtro do ícone */
-body.dark .nav-icon-img {
-    /* Cor dos ícones no modo escuro (Ex: Cinza claro) */
-    filter: invert(70%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
-}
-
-body.dark .nav-item:hover .nav-icon-img,
-body.dark .nav-item.active .nav-icon-img {
-    /* Cor no hover/ativo no modo escuro (Ex: Branco total) */
-    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
 }
 
 .nav-item i {
